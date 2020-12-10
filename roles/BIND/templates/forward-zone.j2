@@ -1,15 +1,13 @@
 $TTL 86400
-@   IN  SOA     dns.anet.internal. root.anet.internal.(
-    4           ;Serial
+@   IN  SOA     dns.{{ forward_zone_name  }}. root.{{ forward_zone_name  }}.(
+    2           ;Serial
     3600        ;Refresh
     1800        ;Retry
     604800      ;Expire
     86400       ;Minimum TTL
 )
 
-@       IN  NS      dns.anet.internal.
+@       IN  NS      dns.{{ forward_zone_name  }}.
 
-dns     IN  A       192.168.1.2
-dns     IN  A       192.168.2.3
-dns     IN  A       192.168.3.2
 dns     IN  A       192.168.4.2
+

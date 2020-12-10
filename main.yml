@@ -13,4 +13,4 @@
     - role: BIND
       vars:
         forward_zone_name: anet.internal
-        dns_sec: no
+        dns_sec: yes
