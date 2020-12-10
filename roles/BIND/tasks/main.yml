@@ -32,3 +32,9 @@
     service: dns
     permanent: yes
     state: enabled
+
+- name: Start and enable BIND
+  systemd:
+    name: named
+    enabled: yes
+    state: restarted

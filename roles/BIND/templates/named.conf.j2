@@ -5,6 +5,8 @@ options {
         memstatistics-file "/var/named/data/named_mem_stats.txt";
         secroots-file   "/var/named/data/named.secroots";
         allow-query     { localhost; 192.168.0.0/16; };
+        allow-transfer { none; };
+        querylog yes;
         recursion no;
         managed-keys-directory "/var/named/dynamic";
         pid-file "/run/named/named.pid";
@@ -31,4 +33,5 @@ zone "anet.internal" IN {
            type master;
            file "anet.internal.db";
            allow-update { localhost;192.168.0.0/16; };
+           allow-query { any; };
 };
