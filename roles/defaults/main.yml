@@ -1,0 +1,2 @@
+forward_zone_name: anet.internal
+dns_sec: no
