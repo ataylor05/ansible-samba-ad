@@ -1,4 +1,9 @@
 ---
+- name: Configure SELinux
+  selinux:
+    policy: targeted
+    state: disabled
+
 - name: Disabling DNS processing in the NetworkManager configuration
   shell: |
     echo '[main]' > /etc/NetworkManager/conf.d/90-dns-none.conf
@@ -83,6 +88,7 @@
     echo 'Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/samba/bin/:/usr/local/samba/sbin' >> /etc/sudoers
   args:
     warn: false
+    creates: /usr/local/samba/sbin/samba
 
 - name: Copy Samba DC systemd file
   copy:

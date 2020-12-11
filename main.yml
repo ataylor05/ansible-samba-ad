@@ -1,14 +1,8 @@
 ---
-- hosts: dns
+- hosts: active-directory
   gather_facts: True
   become: True
   roles:
-    # - role: common
-    #   vars:
-    #     host_name: k8s-master
-    #     fqdn_hostname: k8s-master.anet.internal
-    #     selinux_state: disabled
-    #     root_pw: Passw@ord123!
 
     - role: BIND
       vars:
