@@ -34,7 +34,7 @@ zone "." IN {
 zone "{{ forward_zone_name  }}" {
     type master;
     file "/var/named/{{ forward_zone_name  }}.db";
-    update-policy { grant * self * A;}
+    update-policy { grant * self * A;};
     allow-query { 192.168.0.0/16; };
 };
 
