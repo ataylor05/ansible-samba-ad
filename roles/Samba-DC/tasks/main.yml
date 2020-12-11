@@ -128,3 +128,14 @@
     daemon_reload: yes
     state: restarted
     enabled: yes
+
+- name: Add BIND9_DLZ for BIND version
+  shell: |
+    echo 'dlz "AD DNS Zone" {' > /usr/local/samba/bind-dns/named.conf
+    echo '    database "dlopen /usr/local/samba/lib/bind9/dlz_bind9_11.so";' >> /usr/local/samba/bind-dns/named.conf
+    echo '};' >> /usr/local/samba/bind-dns/named.conf
+
+- name: Add BIND9_DLZ module named config
+  shell: |
+    echo 'include "/usr/local/samba/bind-dns/named.conf";' >> /etc/named.conf
+    systemctl restart named
