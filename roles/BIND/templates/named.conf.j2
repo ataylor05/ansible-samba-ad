@@ -7,7 +7,7 @@ options {
         memstatistics-file "/var/named/data/named_mem_stats.txt";
         secroots-file   "/var/named/data/named.secroots";
         recursing-file  "/var/named/data/named.recursing";
-        allow-query     { any; };
+        allow-query     { 192.168.0.0/16; };
         recursion yes;
 
         dnssec-enable {{ dns_sec }};
@@ -29,6 +29,13 @@ logging {
 zone "." IN {
         type hint;
         file "named.ca";
+};
+
+zone "{{ forward_zone_name  }}" {
+    type master;
+    file "/var/named/{{ forward_zone_name  }}.db";
+    update-policy { 192.168.0.0/16; };
+    allow-query     { 192.168.0.0/16; };
 };
 
 include "/etc/named.rfc1912.zones";
