@@ -27,22 +27,14 @@
     group: named
     mode: '0664'
 
-- name: Create forward zone
-  template:
-    src: templates/forward-zone.j2
-    dest: /var/named/{{ forward_zone_name  }}.db
-    owner: named
-    group: named
-    mode: '0664'
-
 - name: Disable Firewalld
   systemd:
     name: firewalld
     enabled: no
     state: stopped
 
-- name: Start and enable BIND
+- name: Enable BIND
   systemd:
     name: named
     enabled: yes
-    state: restarted
+    state: stopped

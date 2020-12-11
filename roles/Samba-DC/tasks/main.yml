@@ -138,4 +138,8 @@
 - name: Add BIND9_DLZ module named config
   shell: |
     echo 'include "/usr/local/samba/bind-dns/named.conf";' >> /etc/named.conf
+    chmod 640 /usr/local/samba/private/dns.keytab
+    chown root:named /usr/local/samba/private/dns.keytab
+    chmod 640 /etc/krb5.conf
+    chown root:named /etc/krb5.conf
     systemctl restart named

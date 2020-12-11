@@ -6,7 +6,6 @@
 
     - role: BIND
       vars:
-        forward_zone_name: anet.internal
         dns_sec: yes
 
     - role: Samba-DC

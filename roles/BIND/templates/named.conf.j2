@@ -12,7 +12,8 @@ options {
 
         dnssec-enable {{ dns_sec }};
         dnssec-validation {{ dns_sec }};
-
+        tkey-gssapi-keytab "/usr/local/samba/private/dns.keytab";
+        minimal-responses yes;
         managed-keys-directory "/var/named/dynamic";
         pid-file "/run/named/named.pid";
         session-keyfile "/run/named/session.key";
@@ -29,13 +30,6 @@ logging {
 zone "." IN {
         type hint;
         file "named.ca";
-};
-
-zone "{{ forward_zone_name  }}" {
-    type master;
-    file "/var/named/{{ forward_zone_name  }}.db";
-    update-policy { grant * self * A;};
-    allow-query { 192.168.0.0/16; };
 };
 
 include "/etc/named.rfc1912.zones";
