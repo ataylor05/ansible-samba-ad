@@ -15,7 +15,7 @@
         forward_zone_name: anet.internal
         dns_sec: yes
 
-    - role: Samba-PDC
+    - role: Samba-DC
       vars:
         samba_version: "4.13.2"
         domain_name: anet
