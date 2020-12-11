@@ -34,8 +34,8 @@ zone "." IN {
 zone "{{ forward_zone_name  }}" {
     type master;
     file "/var/named/{{ forward_zone_name  }}.db";
-    update-policy { 192.168.0.0/16; };
-    allow-query     { 192.168.0.0/16; };
+    update-policy { grant * self * A;}
+    allow-query { 192.168.0.0/16; };
 };
 
 include "/etc/named.rfc1912.zones";

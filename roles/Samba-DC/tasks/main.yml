@@ -1,0 +1,121 @@
+---
+- name: Disabling DNS processing in the NetworkManager configuration
+  shell: |
+    echo '[main]' > /etc/NetworkManager/conf.d/90-dns-none.conf
+    echo 'dns=none' >> /etc/NetworkManager/conf.d/90-dns-none.conf
+    systemctl reload NetworkManager
+  args:
+    warn: false
+    
+- name: Remove krb5.conf
+  file:
+    path: /etc/krb5.conf
+    state: absent
+
+- name: Install extra repos
+  dnf:
+    name:
+      - epel-release
+      - dnf-plugins-core
+    state: latest
+
+- name: Enable Power Tools repo
+  shell: dnf config-manager --set-enabled PowerTools
+  args:
+    warn: false
+
+- name: Install Samba dependencies
+  dnf:
+    name:
+      - docbook-style-xsl
+      - gcc
+      - gdb
+      - gnutls-devel
+      - gpgme-devel
+      - jansson-devel
+      - keyutils-libs-devel
+      - krb5-workstation
+      - libacl-devel
+      - libaio-devel
+      - libarchive-devel
+      - libattr-devel
+      - libblkid-devel
+      - libtasn1
+      - libtasn1-tools
+      - libxml2-devel
+      - libxslt
+      - lmdb-devel
+      - openldap-devel
+      - pam-devel
+      - perl
+      - perl-ExtUtils-MakeMaker
+      - perl-Parse-Yapp
+      - popt-devel
+      - python3-cryptography
+      - python3-dns
+      - python3-gpg
+      - python36-devel
+      - readline-devel
+      - rpcgen
+      - systemd-devel
+      - tar
+      - zlib-devel
+    state: latest
+
+- name: Download Samba release
+  unarchive:
+    src: https://download.samba.org/pub/samba/stable/samba-{{ samba_version }}.tar.gz
+    dest: /tmp
+    remote_src: yes
+    mode: '0660'
+
+- name: Build Samba
+  shell: |
+    chmod -R 777 /tmp/samba-{{ samba_version }}
+    cd /tmp/samba-{{ samba_version }}
+    ./configure
+    make
+    make install
+    echo 'export PATH=/usr/local/samba/bin/:/usr/local/samba/sbin/:$PATH' >> /etc/profile
+    echo 'Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/samba/bin/:/usr/local/samba/sbin' >> /etc/sudoers
+  args:
+    warn: false
+
+- name: Copy Samba DC systemd file
+  copy:
+    src: samba-ad-dc.service
+    dest: /etc/systemd/system/samba-ad-dc.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Install Samaba DC
+  shell: |
+    samba-tool domain provision \
+       --server-role=dc \
+       --use-rfc2307 \
+       --dns-backend={{ dns_backend }} \
+       --realm={{ realm }} \
+       --domain={{ domain_name }} \
+       --adminpass={{ administrator_password }}
+
+- name: Copy krb5.conf file
+  copy:
+    src: /usr/local/samba/private/krb5.conf
+    dest: /etc/krb5.conf
+    owner: root
+    group: root
+    mode: '0700'
+    remote_src: yes
+
+- name: Update /etc/resolv.conf
+  shell: |
+    echo "search {{ realm }}" > /etc/resolv.conf
+    echo "nameserver {{ ansible_facts['default_ipv4']['address'] }}" > /etc/resolv.conf
+
+- name: Start and enable samba service
+  systemd:
+    name: samba-ad-dc
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
