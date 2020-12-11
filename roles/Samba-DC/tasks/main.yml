@@ -6,6 +6,7 @@
     systemctl reload NetworkManager
   args:
     warn: false
+    creates: /etc/NetworkManager/conf.d/90-dns-none.conf
     
 - name: Remove krb5.conf
   file:
@@ -28,6 +29,8 @@
   dnf:
     name:
       - docbook-style-xsl
+      - dbus-common
+      - dbus-devel
       - gcc
       - gdb
       - gnutls-devel
