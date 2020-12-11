@@ -20,7 +20,7 @@
     state: latest
 
 - name: Enable Power Tools repo
-  shell: dnf config-manager --set-enabled PowerTools
+  shell: dnf config-manager --set-enabled powertools
   args:
     warn: false
 
