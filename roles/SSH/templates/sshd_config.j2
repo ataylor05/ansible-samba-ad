@@ -1,4 +1,4 @@
-Port {{ port_number }}
+Port 22
 AddressFamily any
 ListenAddress 0.0.0.0
 ListenAddress ::
@@ -13,15 +13,15 @@ HostKey /etc/ssh/ssh_host_ed25519_key
 # Logging
 #SyslogFacility AUTH
 SyslogFacility AUTHPRIV
-LogLevel {{ log_level }}
+LogLevel INFO
 
 # Authentication:
 
 LoginGraceTime 2m
-PermitRootLogin {{ permit_root_login }}
+PermitRootLogin no
 #StrictModes yes
-MaxAuthTries {{ max_auth_tries }}
-MaxSessions {{ max_sessions }}
+MaxAuthTries 3
+MaxSessions 3
 
 PubkeyAuthentication yes
 AuthorizedKeysFile      .ssh/authorized_keys
@@ -37,7 +37,7 @@ AuthorizedKeysFile      .ssh/authorized_keys
 #IgnoreRhosts yes
 
 PermitEmptyPasswords no
-PasswordAuthentication {{ password_authentication }}
+PasswordAuthentication no
 
 # Change to no to disable s/key passwords
 #ChallengeResponseAuthentication yes
@@ -59,10 +59,10 @@ GSSAPICleanupCredentials no
 
 UsePAM yes
 
-AllowAgentForwarding {{ allow_tunneling }}
-AllowTcpForwarding {{ allow_tunneling }}
+AllowAgentForwarding no
+AllowTcpForwarding no
 #GatewayPorts no
-X11Forwarding {{ allow_tunneling }}
+X11Forwarding no
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
