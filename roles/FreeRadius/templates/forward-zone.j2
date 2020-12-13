@@ -1,0 +1,13 @@
+$TTL 86400
+@   IN  SOA     ad.{{ forward_zone_name  }}. root.{{ forward_zone_name  }}.(
+    1           ;Serial
+    3600        ;Refresh
+    1800        ;Retry
+    604800      ;Expire
+    86400       ;Minimum TTL
+)
+
+@       IN  NS      ad.{{ forward_zone_name  }}.
+
+ad        IN  A       192.168.4.2
+gate      IN  A       192.168.1.1

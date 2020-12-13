@@ -1,0 +1,92 @@
+Port {{ port_number }}
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Ciphers and keying
+#RekeyLimit default none
+
+# Logging
+#SyslogFacility AUTH
+SyslogFacility AUTHPRIV
+LogLevel {{ log_level }}
+
+# Authentication:
+
+LoginGraceTime 2m
+PermitRootLogin {{ permit_root_login }}
+#StrictModes yes
+MaxAuthTries {{ max_auth_tries }}
+MaxSessions {{ max_sessions }}
+
+PubkeyAuthentication yes
+AuthorizedKeysFile      .ssh/authorized_keys
+
+#AuthorizedPrincipalsFile none
+#AuthorizedKeysCommand none
+#AuthorizedKeysCommandUser nobody
+
+# Change to yes if you don't trust ~/.ssh/known_hosts for
+# HostbasedAuthentication
+#IgnoreUserKnownHosts no
+# Don't read the user's ~/.rhosts and ~/.shosts files
+#IgnoreRhosts yes
+
+PermitEmptyPasswords no
+PasswordAuthentication {{ password_authentication }}
+
+# Change to no to disable s/key passwords
+#ChallengeResponseAuthentication yes
+ChallengeResponseAuthentication no
+
+# Kerberos options
+#KerberosAuthentication no
+#KerberosOrLocalPasswd yes
+#KerberosTicketCleanup yes
+#KerberosGetAFSToken no
+#KerberosUseKuserok yes
+
+# GSSAPI options
+GSSAPIAuthentication yes
+GSSAPICleanupCredentials no
+#GSSAPIStrictAcceptorCheck yes
+#GSSAPIKeyExchange no
+#GSSAPIEnablek5users no
+
+UsePAM yes
+
+AllowAgentForwarding {{ allow_tunneling }}
+AllowTcpForwarding {{ allow_tunneling }}
+#GatewayPorts no
+X11Forwarding {{ allow_tunneling }}
+#X11DisplayOffset 10
+#X11UseLocalhost yes
+#PermitTTY yes
+
+PrintMotd no
+
+#PrintLastLog yes
+#TCPKeepAlive yes
+#PermitUserEnvironment no
+#Compression delayed
+#ClientAliveInterval 0
+#ClientAliveCountMax 3
+#UseDNS no
+#PidFile /var/run/sshd.pid
+#MaxStartups 10:30:100
+#PermitTunnel no
+#ChrootDirectory none
+#VersionAddendum none
+
+# Accept locale-related environment variables
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+
+# override default of no subsystems
+Subsystem       sftp    /usr/libexec/openssh/sftp-server
