@@ -3,11 +3,6 @@
   gather_facts: True
   become: True
   roles:
-    - role: SSH
-
-    - role: BIND
-      vars:
-        dns_sec: yes
 
     - role: Samba-DC
       vars:
@@ -15,4 +10,3 @@
         domain_name: anet
         realm: anet.internal
         administrator_password: Passw@ord123!
-        dns_backend: BIND9_DLZ
