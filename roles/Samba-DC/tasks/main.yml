@@ -103,7 +103,7 @@
     samba-tool domain provision \
        --server-role=dc \
        --use-rfc2307 \
-       --dns-backend={{ dns_backend }} \
+       --dns-backend=SAMBA_INTERNAL \
        --realm={{ realm }} \
        --domain={{ domain_name }} \
        --adminpass={{ administrator_password }}
@@ -128,18 +128,3 @@
     daemon_reload: yes
     state: restarted
     enabled: yes
-
-- name: Add BIND9_DLZ for BIND version
-  shell: |
-    echo 'dlz "AD DNS Zone" {' > /usr/local/samba/bind-dns/named.conf
-    echo '    database "dlopen /usr/local/samba/lib/bind9/dlz_bind9_11.so";' >> /usr/local/samba/bind-dns/named.conf
-    echo '};' >> /usr/local/samba/bind-dns/named.conf
-
-- name: Add BIND9_DLZ module named config
-  shell: |
-    echo 'include "/usr/local/samba/bind-dns/named.conf";' >> /etc/named.conf
-    chmod 640 /usr/local/samba/private/dns.keytab
-    chown root:named /usr/local/samba/private/dns.keytab
-    chmod 640 /etc/krb5.conf
-    chown root:named /etc/krb5.conf
-    systemctl restart named
