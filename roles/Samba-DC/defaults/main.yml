@@ -2,4 +2,3 @@ samba_version: "4.13.2"
 domain_name: anet
 realm: anet.internal
 administrator_password: Passw@ord123!
-dns_backend: BIND9_DLZ
